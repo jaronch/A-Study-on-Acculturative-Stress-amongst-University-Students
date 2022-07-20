@@ -9,7 +9,7 @@ An original statistical report where I analyse 268 records of depression, accult
 
 The dataset analysed is sourced from a comprehensive study published in the peer-reviewed open access journal Data by Nguyen et al. (2019), ‘A Dataset of Students’ Mental Health and Help-Seeking Behaviors in a Multicultural Environment’.
 
-I analyse 2 key question, applying data analytic techniques to support my response.
+I analyse 2 key questions, applying data analytic techniques to support my response.
 1. What levels of acculturative stress do international and domestic students experience?
 2. What is the relationship between acculturative stress and depression for international and domestic students?
 
