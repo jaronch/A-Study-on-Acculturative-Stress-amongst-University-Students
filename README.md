@@ -17,6 +17,7 @@ This project was completed individually from scratch as part of uni coursework. 
 
 ## Technologies and Access
 The report and data analytic techniques were completed with R and R Markdown.
+
 The report can be accessed [here](https://https://jaronch.github.io/Project-1.html).
 
 ## Sources
