@@ -18,7 +18,7 @@ This project was completed individually from scratch as part of uni coursework. 
 ## Technologies and Access
 The report and data analytic techniques were completed with R and R Markdown.
 
-The report can be accessed [here](https://https://jaronch.github.io/Project-1.html).
+The report can be accessed [here](https://jaronch.github.io/A-Study-on-Acculturative-Stress-amongst-University-Students/).
 
 ## Sources
 Black Dog Institute (2018). “Types of Depression”. https://www.blackdoginstitute.org.au/clinical-resources/depression/types-of-depression
