@@ -4,6 +4,8 @@
 * [Technologies and Access](#technologies-and-access)
 * [Sources](#sources)
 
+The report can be accessed [here](https://jaronch.github.io/A-Study-on-Acculturative-Stress-amongst-University-Students/).
+
 ## General Info
 An original statistical report where I analyse 268 records of depression, acculturative stress, and help-seeking behaviour as reported by students, both international and domestic, at an international university in Japan.
 
@@ -15,10 +17,8 @@ I analyse 2 key questions, applying data analytic techniques to support my respo
 
 This project was completed individually from scratch as part of uni coursework. Final mark was 35/35.
 
-## Technologies and Access
+## Technologies
 The report and data analytic techniques were completed with R and R Markdown.
-
-The report can be accessed [here](https://jaronch.github.io/A-Study-on-Acculturative-Stress-amongst-University-Students/).
 
 ## Sources
 Black Dog Institute (2018). “Types of Depression”. https://www.blackdoginstitute.org.au/clinical-resources/depression/types-of-depression
