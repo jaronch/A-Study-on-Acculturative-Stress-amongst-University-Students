@@ -1,0 +1,283 @@
+---
+title: "A Study on Acculturative Stress amongst University Students"
+author: "SID: 490429381 | Class: Thursday, 1-2pm, Carslaw Comp Lab, 705-706"
+subtitle: "MATH1005 | Semester 1, 2020 | Project 1"
+
+output:
+  html_document:
+    fig_caption: yes
+    number_sections: yes
+    self_contained: yes
+    theme: paper
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: hide
+---
+
+<br>
+
+# Executive Summary
+
+
+Containing 268 records of depression, acculturative stress, and help-seeking behaviour as reported by students, both international and domestic, at an international university in Japan, this dataset is a result of a comprehensive study by Nguyen et al. (2019), ‘A  Dataset of Students' Mental Health and Help-Seeking Behaviors in a Multicultural Environment’.
+
+
+ With more than 4.1 million tertiary-level students studying outside their country of citizenship according to the Organization for Economic Cooperation and Development (2012), the aim of this report is to bring into light the stresses that go along with acculturation, that is the process of assimilating into a different culture, on international and domestic university students.
+The relationship between acculturative stress and depressive disorders that students can suffer from is also significant and examined.
+
+The main discoveries of this research are that international students generally experience higher levels of acculturative stress, particularly international students suffering from depression, though domestic students should not be forgotten, again, especially those suffering from depression. 
+
+
+It is the hope of this study that greater awareness is raised to universities, health authorities and people, that a healthy environment and gracious support is promoted and available to help those students that are vulnerable.
+
+
+
+
+# Full Report
+
+## Initial Data Analysis
+
+The data used in this report was sourced from an article published in the peer-reviewed open access journal Data by Nguyen et al. (2019). The researchers collected this data as the literature regarding the determinants and prevalence of mental health problems in Japan for domestic and international students was limited. They supply open access to the source dataset, which was where this was obtained, to allow others in the scientific community to analyse it and make contributions to mental health in universities to help the student population. Being published in a peer-reviewed journal the data is of high reliability and integrity.
+
+The data was collected by a web-based survey which is a common methodology today with advantages of being low-cost, convenient and accessible. The survey was voluntary, thus a consent bias could exist where those who partook in the survey are not representative of the student population though this is a bias that usually needs to be accepted. Being an observational study that takes measurements and controls no variable, whilst associations can be made, it is very difficult to establish causation as there are many confounding factors, thus conclusions require great care and thus the dataset is limited in this regard.
+
+The validity of the measures taken to record acculturative stress and depression could come into question, though the researchers respectively use the Acculturative Stress Scale for International Students (ASSIS) (Sandhu & Asrabadi, 1994) and the Patient Health Questionnaire (PHQ-9). The former has its reliability confirmed by several studies (Wei et al., 2007; Yang et al., 2018), and the latter is used commonly to screen for depression (Levis et al., 2019). Thus, the variables regarding acculturative stress and depression which shall be analysed are of high validity. 
+
+
+
+The dataset by Nguyen et al. (2019) is comprehensive, with each row representing one of the 268 records of students of the Japanese international university who completed the survey, and each column representing one of the 25 qualitative variables or the 26 quantitative variables. The variables are about socio-demographic information as well as mental health conditions, including acculturative stress, depression, social connectedness and help-seeking behaviours, which were measured categorically and/or numerically on a scale. 
+
+The variables that will be used in our research are ‘inter_dom’, ‘Japanese_cate’, and the variables associated with depression and acculturative stress which are explained in Table 1. The classifications R have made have been correctly attributed as a factor if it is a categorical variable and as an integer if a numerical variable, and those classifications will fit in our analysis, allowing us to analyse the data thoroughly.
+
+
+
+```{r}
+
+# LOAD DATA
+data = read.csv("data-04-00124-s001/data.csv")
+
+# Variable names and their classification
+sapply(data, class)
+
+
+```
+![](data-04-00124-s001/Table 1.png)
+
+<br>
+
+But whilst R did correctly classify the variables of our data, for the graphs, the data is best presented when ‘Japanese_cate’, the Japanese language proficiency that the students reported, has the factors ordered from ‘Low’, ‘Average’ to ‘High’, thus it has been coded that these levels become ordered, and similarly, ordering was done with ‘DepType’.
+
+```{r}
+
+# Checking if Japanese_cate is ordered
+str(data$Japanese_cate)
+
+# R classified the variable inter_dom as a factor having three levels "Low", "Average", "High", which is correct. But we also want to order the levels from low to high, so some manipulation required.
+data$Japanese_cate = factor(data$Japanese_cate, levels = c("Low", "Average", "High"), ordered = TRUE)
+
+# Check if R has ordered the factors
+min(data$Japanese_cate)
+
+# We want to order DepType in order
+data$DepType = factor(data$DepType, levels = c("No", "Other", "Major"), ordered = TRUE)
+
+
+# Check if R has ordered the factors
+min(data$DepType)
+
+```
+<br>
+
+## What levels of acculturative stress do international and domestic students experience?
+
+It is reasonable to predict that international students over domestic experience more acculturative stress as they have to adapt to a new environment. As such responses would have a large spread, box plots are used as they are a robust form of representing data that will not be affected by outliers.
+
+A boxplot of total acculturative stress against domestic/international student status reveals our prediction is correct with international students exhibiting a higher median and higher maximum. However, the spread is quite large, with the minimums identical and a large IQR. Those domestic students who reported higher levels of acculturative stress may come from another region of Japan and/or are getting used to the new university environment, and these are stressors that should not be discounted.
+
+```{r}
+# Get ggplot2 package
+library(ggplot2)
+
+# Using ggplot to create an elegant grouped boxplot of Total Acculturative Stress ("ToAS) (quantitative) of international or domestic ("inter_dom") (qualitative) students
+ggplot(data, aes(x=inter_dom, y=ToAS, fill=inter_dom)) + 
+    geom_boxplot() +
+    labs(title="Total Acculturative Stress of Students",x="Domestic or International Student", y = "Total Acculturative Stress")+
+    theme(legend.position="none") +
+  scale_y_continuous(limits=c(0,150))
+```
+
+To obtain deeper analysis, grouping by whether the student is of domestic/international origin, as well as by Japanese language proficiency would be useful. 
+Approximately 2.7 million foreigners are mid-to-long term residents of Japan (Japan Statistical Yearbook, 2020), hence, we are now able to differentiate between those international students who may have lived in Japan and know the language, from those who are very new to the nation.
+
+Differences are indeed reflected in the grouped box plots of domestic/international origin and Japanese proficiency against acculturative stress. (In the group of domestic, low Japanese proficiency there is only one student, who is considered an outlier). 
+For total acculturative stress, medians of those with higher Japanese proficiency reflected lower acculturative stress with both international and domestic students. International students who spoke little Japanese reported the highest median for acculturative stress.
+
+```{r}
+# Using ggplot to create an elegant grouped boxplot of Total Acculturative Stress of domestic/international origin AND Students by Japanese language proficiency
+ggplot(data, aes(x=Japanese_cate, y=ToAS, fill=inter_dom)) +
+  geom_boxplot() +
+labs(title="Total Acculturative Stress of Students by Japanese language proficiency",x="Japanese Language Proficiency", y = "Total Acculturative Stress", fill = "Domestic or International Student") +
+  theme(legend.position = "bottom") +
+  scale_y_continuous(limits=c(0,150))
+```
+
+In the subgroups of acculturative stress, that trend generally holds in all five, with high Japanese proficiency domestic students reporting lower medians of stress in all areas. International students with low Japanese proficiency reported the highest levels in all areas exempt fear.
+
+A highlight is that domestic students with average Japanese proficiency, besides in perceived hatred, reported medians similar to their international counterparts, emphasising that acculturative stress can occur to domestic students also. 
+
+
+
+```{r}
+# Using ggplot to create an elegant grouped boxplot of Perceived Discrimination experienced by International or Domestic Students
+ggplot(data, aes(x=Japanese_cate, y=APD, fill=inter_dom)) +
+  geom_boxplot() +
+labs(title="Perceived Discrimination experienced by Students by Japanese language proficiency",x="Japanese Language Proficiency", y = "Perceived Discrimination", fill = "Domestic or International Student") +
+  theme(legend.position = "bottom") +
+  scale_y_continuous(limits=c(0,50))
+
+# Using ggplot to create an elegant grouped boxplot of Homesickness experienced by International or Domestic Students
+ggplot(data, aes(x=Japanese_cate, y=AHome, fill=inter_dom)) +
+  geom_boxplot() +
+labs(title="Homesickness experienced by Students by Japanese language proficiency",x="Japanese Language Proficiency", y = "Homesickness", fill = "Domestic or International Student") +
+  theme(legend.position = "bottom") +
+  scale_y_continuous(limits=c(0,25))
+
+
+# Using ggplot to create an elegant grouped boxplot of Culture Shock experienced by International or Domestic Students
+ggplot(data, aes(x=Japanese_cate, y=ACS, fill=inter_dom)) +
+  geom_boxplot() +
+labs(title="Culture Shock experienced by Students by Japanese language proficiency",x="Japanese Language Proficiency", y = "Culture Shock", fill = "Domestic or International Student") +
+  theme(legend.position = "bottom") +
+  scale_y_continuous(limits=c(0,15))
+
+
+# Using ggplot to create an elegant grouped boxplot of Perceived Hatred experienced by International or Domestic Students
+ggplot(data, aes(x=Japanese_cate, y=APH, fill=inter_dom)) +
+  geom_boxplot() +
+labs(title="Perceived Hatred experienced by Students by Japanese language proficiency",x="Japanese Language Proficiency", y = "Perceived Hatred", fill = "Domestic or International Student") +
+  theme(legend.position = "bottom") +
+  scale_y_continuous(limits=c(0,30))
+
+
+# Using ggplot to create an elegant grouped boxplot of Fear experienced by International or Domestic Students
+ggplot(data, aes(x=Japanese_cate, y=Afear, fill=inter_dom)) +
+  geom_boxplot() +
+labs(title="Fear experienced by Students by Japanese language proficiency",x="Japanese Language Proficiency", y = "Fear", fill = "Domestic or International Student") +
+  theme(legend.position = "bottom") +
+  scale_y_continuous(limits=c(0,20))
+
+```
+
+<br>
+
+Ultimately, the research shows that international students generally experience higher levels of acculturative stress as they assimilate into university culture in a new country. However, domestic students should not be discounted as they too carry this pressure. This research urges universities to be aware of these factors, make necessary services available and promote a culture of inclusiveness and support.
+
+<br>
+
+## What is the relationship between acculturative stress and depression for international and domestic students?
+
+
+A scatter plot and regression line of acculturative stress and depression, grouped by international/domestic origin, reveals that those who experience greater levels of depression experience greater levels of acculturative stress and vice versa. Both types of students exhibit this positive linear correlation, with international students experiencing greater acculturative stress than domestic students as shown previously. The regression line including all students has equation $$y = 57.635 + 1.801x$$ The correlation value between these two variables is 0.394, and thus is a relatively weak linear correlation, as can be seen by the variability in the scatter plot. Thus whilst general predictions could be made, the weak correlation indicates that such predictions would be less valid.
+
+```{r}
+cor(data$ToAS, data$ToDep)
+lm(data$ToAS~data$ToDep)
+
+# The regression line has equation y = 57.635 +1.801x
+
+
+ggplot(data, aes(x=ToDep, y=ToAS, color = inter_dom, shape = inter_dom)) + 
+  geom_point() +
+  geom_smooth(method=lm, se = FALSE, fullrange = TRUE) +
+  labs(title="Acculturative Stress and Depression experienced by Students",x="Depression", y = "Total Acculturative Stress")+
+ theme(legend.position = "bottom")
+```
+ 
+As the spread is quite large, box plots are usually better forms of data representation and so thus will be used in further analysis of this relationship. We will also group the students not only on domestic/international origin but by type of depressive disorder, with “Major” referring to major depression, the main symptom being a state of constant hopelessness, and “Other” referring to other less common depressive disorders (Black Dog Institute, 2018).
+
+A boxplot of total acculturative stress grouped by type of depressive order and domestic/international origin reveals that those in the “Other” and “Major” group experienced greater acculturative stress with higher medians, than those who reported no depression.
+Notably, international students had higher medians of total acculturative stress across all types of depressive disorders.
+
+```{r}
+# Using ggplot to create an elegant grouped boxplot of Total Acculturative Stress of Students by Type of Depressive Disorder
+ggplot(data, aes(x=DepType, y=ToAS, fill=inter_dom)) +
+  geom_boxplot() +
+labs(title="Total Acculturative Stress of Students by Type of Depressive Disorder",x="Type of Depressive Disorder", y = "Total Acculturative Stress", fill = "Domestic or International Student") +
+  theme(legend.position = "bottom") +
+  scale_y_continuous(limits=c(0,150))
+```
+
+A closer examination across the five subgroups of acculturative stress portrays similar trends. International students suffering from major depression had higher medians and maximums than their domestic counterparts, accentuating the increased suffering that those who are in a new environment must also be burdened with. However, domestic students with major depression should also be accounted for as their scores were comparable.
+
+International students in all cases exhibited greater scores than their domestic counterparts, again affirming the stresses that acculturation brings.
+
+
+
+<br>
+```{r}
+
+# Using ggplot to create an elegant grouped boxplot of Perceived Discrimination experienced by International or Domestic Students
+ggplot(data, aes(x=DepType, y=APD, fill=inter_dom)) +
+  geom_boxplot() +
+labs(title="Perceived Discrimination experienced by Students by Type of Depressive Disorder",x="Type of Depressive Disorder", y = "Perceived Discrimination", fill = "Domestic or International Student") +
+  theme(legend.position = "bottom") +
+  scale_y_continuous(limits=c(0,50))
+
+# Using ggplot to create an elegant grouped boxplot of Homesickness experienced by International or Domestic Students
+ggplot(data, aes(x=DepType, y=AHome, fill=inter_dom)) +
+  geom_boxplot() +
+labs(title="Homesickness experienced by Students by Type of Depressive Disorder",x="Type of Depressive Disorder", y = "Homesickness", fill = "Domestic or International Student") +
+  theme(legend.position = "bottom") +
+  scale_y_continuous(limits=c(0,25))
+
+# Using ggplot to create an elegant grouped boxplot of Culture Shock experienced by International or Domestic Students
+ggplot(data, aes(x=DepType, y=ACS, fill=inter_dom)) +
+  geom_boxplot() +
+labs(title="Culture Shock experienced by Students by Type of Depressive Disorder",x="Type of Depressive Disorder", y = "Culture Shock", fill = "Domestic or International Student") +
+  theme(legend.position = "bottom") +
+  scale_y_continuous(limits=c(0,15))
+
+# Using ggplot to create an elegant grouped boxplot of Perceived Hatred experienced by International or Domestic Students
+ggplot(data, aes(x=DepType, y=APH, fill=inter_dom)) +
+  geom_boxplot() +
+labs(title="Perceived Hatred experienced by Students by Type of Depressive Disorder",x="Type of Depressive Disorder", y = "Perceived Hatred", fill = "Domestic or International Student") +
+  theme(legend.position = "bottom") +
+  scale_y_continuous(limits=c(0,30))
+
+# Using ggplot to create an elegant grouped boxplot of Fear experienced by International or Domestic Students
+ggplot(data, aes(x=DepType, y=AHome, fill=inter_dom)) +
+  geom_boxplot() +
+labs(title="Fear experienced by Students by Type of Depressive Disorder",x="Type of Depressive Disorder", y = "Fear", fill = "Domestic or International Student") +
+  theme(legend.position = "bottom") +
+  scale_y_continuous(limits=c(0,20))
+
+
+```
+<br>
+
+In conclusion, supporting our previous research, international students generally experience acculturative stress greater than domestic students, though domestic students should never be discounted.
+But ultimately, it is those already suffering from depression, those with other depressive disorders and particularly those with major depression and of international origin, that are shown to experience the most suffering. Universities, health authorities and all people should take particular note of this research, and assist students suffering with depression support and care. 
+<br>
+
+
+
+# References
+
+Black Dog Institute (2018). “Types of Depression”. https://www.blackdoginstitute.org.au/clinical-resources/depression/types-of-depression
+
+Eskanadrieh, S., Liu, Y., Yamashina, H., Kono, K., Arai, A., Lee, R., Tamshiro, H., (2012). Depressive symptoms among international university students in northern Japan: Prevalence and associated factors. Journal of International Health, 27, 165–170. https://doi.org/10.11197/jaih.27.165
+
+Japan. Statistics Bureau, Ministry of Internal Affairs and Communications. (2020). Japan Statistical Yearbook 2020. http://www.stat.go.jp/english/data/nenkan/69nenkan/zenbun/en69/top.html
+
+Levis, B., Benedetti, A., Thombs, B. D., (2019). Accuracy of patient health questionnaire-9 (PHQ-9) for screening to detect major depression: Individual participant data meta-analysis. BMJ, 365, I1476. https://doi.org/10.1136/bmj.l1476
+
+Mitsui, N., Asakura, S., Takanobu, K., Watanabe, S., Toyoshima, K., Kako, Y., Ito, Y.M., Kusumi, I., (2018). Prediction of major depressive episodes and suicide-related ideation over a 3-year interval among Japanese undergraduates. PLOS ONE, 13(7), e0201047. https://doi.org/10.1371/journal.pone.0201047
+
+Nguyen, M.-H., Ho, M.-T., Nguyen, Q.-Y.T, Vuong, Q.-H. (2019). A Dataset of Students’ Mental Health and Help-Seeking Behaviors in a Multicultural Environment. Data, 4(3), Article 124.  https://doi.org/10.3390/data4030124
+
+OECD (2012). "How many students study abroad and where do they go?”. Education at a Glance 2012:Highlights. OECD Publishing, Paris. https://doi.org/10.1787/eag_highlights-2012-9-en.
+
+Sandhu, D. S., Asrabadi, B. R., (1994). Development of an acculturative stress scale for international students: Preliminary findings. Psychological Reports, 75, 435–448. https://doi.org/10.2466/pr0.1994.75.1.435
+
+Wei, M., Heppner, P.P., Mallen, M. J., Ku, T.-Y., Liao, K. Y. -H., Wu, T. -F., (2007). Acculturative stress, perfectionism, years in the United States, and depression among Chinese international students. Journal of Counseling Psychology, 54(4), 385–394. https://doi.org/10.1037/0022-0167.54.4.385
