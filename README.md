@@ -1,7 +1,7 @@
 # A-Study-on-Acculturative-Stress-amongst-University-Students
 ## Table of contents
 * [General Info](#general-info)
-* [Technologies and Access](#technologies-and-access)
+* [Technologies](#technologies)
 * [Sources](#sources)
 
 The report can be accessed [here](https://jaronch.github.io/A-Study-on-Acculturative-Stress-amongst-University-Students/).
